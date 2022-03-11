@@ -12,6 +12,7 @@ public enum ImoocMallExceptionEnum {
     NEED_ADMIN(10009,"not admin"),
     PARA_NOT_NULL(10010,"parameters should not be null"),
     CREATE_FAILED(10011,"creation failed"),
+    REQUEST_PARAM_ERROR(10012,"request parameters error"),
     SYSTEM_ERROR(20000,"system error");
 
 

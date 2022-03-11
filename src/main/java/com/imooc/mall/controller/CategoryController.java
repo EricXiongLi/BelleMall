@@ -12,12 +12,14 @@ import com.imooc.mall.service.CategoryService;
 import com.imooc.mall.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 
 @Controller
 public class CategoryController {
@@ -29,10 +31,9 @@ public class CategoryController {
 
      @PostMapping("/admin/category/add")
      @ResponseBody
-    public ApiRestResponse addCategory(HttpSession httpSession, @RequestBody AddCategoryReq addCategoryReq) throws ImoocMallException {
-        if (addCategoryReq.getName()==null || addCategoryReq.getType() == null || addCategoryReq.getOrderNum() == null || addCategoryReq.getParentId() == null) {
-            return ApiRestResponse.error(ImoocMallExceptionEnum.PARA_NOT_NULL);
-        }
+    public ApiRestResponse addCategory(HttpSession httpSession,
+                                       @Valid @RequestBody AddCategoryReq addCategoryReq) throws ImoocMallException {
+
         User currentUser = (User) httpSession.getAttribute(Constant.IMOOC_MALL_USER);
         if (currentUser==null) {
             return ApiRestResponse.error(ImoocMallExceptionEnum.NEED_LOGIN);
