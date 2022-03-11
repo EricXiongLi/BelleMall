@@ -10,6 +10,7 @@ import com.imooc.mall.model.pojo.User;
 import com.imooc.mall.model.request.AddCategoryReq;
 import com.imooc.mall.service.CategoryService;
 import com.imooc.mall.service.UserService;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
@@ -29,6 +30,7 @@ public class CategoryController {
     @Autowired
     CategoryService categoryService;
 
+    @ApiOperation("add new category")
      @PostMapping("/admin/category/add")
      @ResponseBody
     public ApiRestResponse addCategory(HttpSession httpSession,

@@ -6,16 +6,16 @@ import javax.validation.constraints.Size;
 
 public class AddCategoryReq {
     @Size(min=2, max=5)
-    @NotNull
+    @NotNull(message="title must not be null")
     private String name;
 
     @Max(3)
     private Integer type;
 
-    @NotNull
+    @NotNull(message="parentId must not be null")
     private Integer parentId;
 
-    @NotNull
+    @NotNull(message="order number must not be null")
     private Integer orderNum;
 
     public String getName() {
