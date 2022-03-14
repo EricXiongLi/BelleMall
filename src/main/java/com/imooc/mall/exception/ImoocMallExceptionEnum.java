@@ -13,6 +13,7 @@ public enum ImoocMallExceptionEnum {
     PARA_NOT_NULL(10010,"parameters should not be null"),
     CREATE_FAILED(10011,"creation failed"),
     REQUEST_PARAM_ERROR(10012,"request parameters error"),
+    DELETE_FAILED(10013,"delete failed"),
     SYSTEM_ERROR(20000,"system error");
 
 
