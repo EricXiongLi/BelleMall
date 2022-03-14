@@ -14,6 +14,8 @@ public enum ImoocMallExceptionEnum {
     CREATE_FAILED(10011,"creation failed"),
     REQUEST_PARAM_ERROR(10012,"request parameters error"),
     DELETE_FAILED(10013,"delete failed"),
+    MKDIR_FAILED(10014,"mkdir failed"),
+    UPLOAD_FAILED(10015,"upload image failed"),
     SYSTEM_ERROR(20000,"system error");
 
 
