@@ -9,13 +9,13 @@ import com.imooc.mall.model.request.AddCategoryReq;
 import java.util.List;
 
 public interface CategoryService {
-    void add(AddCategoryReq addCategoryReq) throws ImoocMallException;
+  void add(AddCategoryReq addCategoryReq) throws ImoocMallException;
 
-    void update(Category updateCategory) throws ImoocMallException;
+  void update(Category updateCategory) throws ImoocMallException;
 
-    void delete(Integer id) throws ImoocMallException;
+  void delete(Integer id) throws ImoocMallException;
 
-    PageInfo listForAdmin(Integer pageNum, Integer pageSize);
+  PageInfo listForAdmin(Integer pageNum, Integer pageSize);
 
-    List<CategoryVO> listCategoryForCustomer();
+  List<CategoryVO> listCategoryForCustomer(Integer parentId);
 }
