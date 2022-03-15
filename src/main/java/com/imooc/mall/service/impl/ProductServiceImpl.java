@@ -20,7 +20,7 @@ public class ProductServiceImpl implements ProductService {
     Product product = new Product();
     BeanUtils.copyProperties(addProductReq, product);
     Product productOld = productMapper.selectByName(addProductReq.getName());
-    if (productOld == null) {
+    if (productOld != null) {
       throw new ImoocMallException(ImoocMallExceptionEnum.NAME_EXISTED);
     }
     int count = productMapper.insertSelective(product);

@@ -37,7 +37,8 @@ public class ProductAdminController {
   public ApiRestResponse upload(
       HttpServletRequest httpServletRequest, @RequestParam("file") MultipartFile file)
       throws ImoocMallException {
-    String fileName = file.getName();
+
+    String fileName = file.getOriginalFilename();
     String suffixName = fileName.substring(fileName.lastIndexOf("."));
     // generate UUID
     UUID uuid = UUID.randomUUID();
