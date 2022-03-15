@@ -1,5 +1,6 @@
 package com.imooc.mall.controller;
 
+import com.github.pagehelper.PageInfo;
 import com.imooc.mall.common.ApiRestResponse;
 import com.imooc.mall.common.Constant;
 import com.imooc.mall.exception.ImoocMallException;
@@ -103,6 +104,13 @@ public class ProductAdminController {
   public ApiRestResponse batchUpdateSellStatus(@RequestParam Integer[] ids,@RequestParam Integer sellStatus) {
     productService.batchUpdateSellStatus(ids, sellStatus);
     return ApiRestResponse.success();
+  }
+
+  @ApiOperation("product list for admin")
+  @PostMapping("/admin/product/list")
+  public ApiRestResponse list (@RequestParam Integer pageNum, @RequestParam Integer pageSize) {
+    PageInfo pageInfo = productService.listForAdmin(pageNum, pageSize);
+    return ApiRestResponse.success(pageInfo);
   }
 
 }
