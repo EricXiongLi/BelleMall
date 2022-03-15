@@ -4,9 +4,14 @@ import com.imooc.mall.common.ApiRestResponse;
 import com.imooc.mall.common.Constant;
 import com.imooc.mall.exception.ImoocMallException;
 import com.imooc.mall.exception.ImoocMallExceptionEnum;
+import com.imooc.mall.model.pojo.Product;
 import com.imooc.mall.model.request.AddProductReq;
+import com.imooc.mall.model.request.UpdateProductReq;
 import com.imooc.mall.service.ProductService;
+import io.swagger.annotations.ApiOperation;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -26,6 +31,7 @@ public class ProductAdminController {
 
   @Autowired ProductService productService;
 
+  @ApiOperation("add new product")
   @PostMapping("admin/product/add")
   public ApiRestResponse addProduct(@Valid @RequestBody AddProductReq addProductReq)
       throws ImoocMallException {
@@ -33,6 +39,7 @@ public class ProductAdminController {
     return ApiRestResponse.success();
   }
 
+  @ApiOperation("upload file for admin")
   @PostMapping("/admin/upload/file")
   public ApiRestResponse upload(
       HttpServletRequest httpServletRequest, @RequestParam("file") MultipartFile file)
@@ -74,4 +81,28 @@ public class ProductAdminController {
     }
     return effectiveUri;
   }
+
+  @ApiOperation("update product")
+  @PostMapping("admin/product/update")
+  public ApiRestResponse updateProduct(@Valid @RequestBody UpdateProductReq updateProductReq) throws ImoocMallException {
+    Product product = new Product();
+    BeanUtils.copyProperties(updateProductReq,product);
+    productService.update(product);
+    return ApiRestResponse.success();
+  }
+
+  @ApiOperation("delete product")
+  @PostMapping("admin/product/delete")
+  public ApiRestResponse deleteProduct(@RequestParam Integer id) throws ImoocMallException {
+    productService.delete(id);
+    return ApiRestResponse.success();
+  }
+
+  @ApiOperation("batch update the status of product")
+  @PostMapping("/admin/product/batchUpdateSellStatus")
+  public ApiRestResponse batchUpdateSellStatus(@RequestParam Integer[] ids,@RequestParam Integer sellStatus) {
+    productService.batchUpdateSellStatus(ids, sellStatus);
+    return ApiRestResponse.success();
+  }
+
 }

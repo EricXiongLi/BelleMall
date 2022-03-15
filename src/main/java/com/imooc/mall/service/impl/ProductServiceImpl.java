@@ -24,8 +24,37 @@ public class ProductServiceImpl implements ProductService {
       throw new ImoocMallException(ImoocMallExceptionEnum.NAME_EXISTED);
     }
     int count = productMapper.insertSelective(product);
-    if (count==0) {
+    if (count == 0) {
       throw new ImoocMallException(ImoocMallExceptionEnum.CREATE_FAILED);
     }
+  }
+
+  @Override
+  public void update(Product updatedProduct) throws ImoocMallException {
+    Product productOld = productMapper.selectByName(updatedProduct.getName());
+    if (productOld != null && productOld.getId().equals(updatedProduct.getId())) {
+      throw new ImoocMallException(ImoocMallExceptionEnum.NAME_EXISTED);
+    }
+    int count = productMapper.updateByPrimaryKeySelective(updatedProduct);
+    if (count == 0) {
+      throw new ImoocMallException(ImoocMallExceptionEnum.UPDATE_FAILED);
+    }
+  }
+
+  @Override
+  public void delete(Integer id) throws ImoocMallException {
+    Product productOld = productMapper.selectByPrimaryKey(id);
+    if (productOld == null) {
+      throw new ImoocMallException(ImoocMallExceptionEnum.DELETE_FAILED);
+    }
+    int count = productMapper.deleteByPrimaryKey(id);
+    if (count==0) {
+      throw new ImoocMallException(ImoocMallExceptionEnum.DELETE_FAILED);
+    }
+  }
+
+  @Override
+  public void batchUpdateSellStatus(Integer[] ids, Integer sellStatus) {
+    productMapper.batchUpdateSellStatus(ids, sellStatus);
   }
 }
