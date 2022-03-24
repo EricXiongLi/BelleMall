@@ -55,6 +55,38 @@ public class CartServiceImpl implements CartService {
     return this.list(userId);
   }
 
+
+  @Override
+  public List<CartVO> update(Integer userId, Integer productId, Integer count)
+          throws ImoocMallException {
+    validProduct(productId, count);
+    Cart cart = cartMapper.selectCartByUserIdAndProductId(userId, productId);
+    if (cart == null) {
+     throw new ImoocMallException(ImoocMallExceptionEnum.UPDATE_FAILED);
+    } else {
+      Cart cartNew = new Cart();
+      cartNew.setQuantity(count);
+      cartNew.setId(cart.getId());
+      cartNew.setUserId(cart.getUserId());
+      cartNew.setProductId(cart.getProductId());
+      cartNew.setSelected(Constant.Cart.CHECKED);
+      cartMapper.updateByPrimaryKeySelective(cartNew);
+    }
+    return this.list(userId);
+  }
+
+  @Override
+  public List<CartVO> delete(Integer userId, Integer productId)
+          throws ImoocMallException {
+    Cart cart = cartMapper.selectCartByUserIdAndProductId(userId, productId);
+    if (cart == null) {
+      throw new ImoocMallException(ImoocMallExceptionEnum.DELETE_FAILED);
+    } else {
+      cartMapper.deleteByPrimaryKey(cart.getId());
+    }
+    return this.list(userId);
+  }
+
   private void validProduct(Integer productId, Integer count) throws ImoocMallException {
     Product product = productMapper.selectByPrimaryKey(productId);
     if (product == null || product.getStatus().equals(Constant.SaleStatus.NOT_SALE)) {

@@ -4,6 +4,7 @@ import com.imooc.mall.common.ApiRestResponse;
 import com.imooc.mall.exception.ImoocMallException;
 import com.imooc.mall.filter.UserFilter;
 import com.imooc.mall.model.VO.CartVO;
+import com.imooc.mall.model.pojo.User;
 import com.imooc.mall.service.CartService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -30,6 +31,21 @@ public class CartController {
   public ApiRestResponse add(@RequestParam Integer productId, @RequestParam Integer count)
       throws ImoocMallException {
     List<CartVO> cartVOList = cartService.add(UserFilter.currentUser.getId(), productId, count);
+    return ApiRestResponse.success(cartVOList);
+  }
+
+  @ApiOperation("update cart")
+  @PostMapping("/update")
+  public ApiRestResponse update(@RequestParam Integer productId, @RequestParam Integer count)
+      throws ImoocMallException {
+    List<CartVO> cartVOList = cartService.update(UserFilter.currentUser.getId(), productId, count);
+    return ApiRestResponse.success(cartVOList);
+  }
+
+  @ApiOperation("delete cart")
+  @PostMapping("/delete")
+  public ApiRestResponse delete(@RequestParam Integer productId) throws ImoocMallException {
+    List<CartVO> cartVOList = cartService.delete(UserFilter.currentUser.getId(), productId);
     return ApiRestResponse.success(cartVOList);
   }
 }
