@@ -55,14 +55,13 @@ public class CartServiceImpl implements CartService {
     return this.list(userId);
   }
 
-
   @Override
   public List<CartVO> update(Integer userId, Integer productId, Integer count)
-          throws ImoocMallException {
+      throws ImoocMallException {
     validProduct(productId, count);
     Cart cart = cartMapper.selectCartByUserIdAndProductId(userId, productId);
     if (cart == null) {
-     throw new ImoocMallException(ImoocMallExceptionEnum.UPDATE_FAILED);
+      throw new ImoocMallException(ImoocMallExceptionEnum.UPDATE_FAILED);
     } else {
       Cart cartNew = new Cart();
       cartNew.setQuantity(count);
@@ -76,14 +75,31 @@ public class CartServiceImpl implements CartService {
   }
 
   @Override
-  public List<CartVO> delete(Integer userId, Integer productId)
-          throws ImoocMallException {
+  public List<CartVO> delete(Integer userId, Integer productId) throws ImoocMallException {
     Cart cart = cartMapper.selectCartByUserIdAndProductId(userId, productId);
     if (cart == null) {
       throw new ImoocMallException(ImoocMallExceptionEnum.DELETE_FAILED);
     } else {
       cartMapper.deleteByPrimaryKey(cart.getId());
     }
+    return this.list(userId);
+  }
+
+  @Override
+  public List<CartVO> selectOrNot(Integer userId, Integer productId, Integer selected)
+      throws ImoocMallException {
+    Cart cart = cartMapper.selectCartByUserIdAndProductId(userId, productId);
+    if (cart == null) {
+      throw new ImoocMallException(ImoocMallExceptionEnum.UPDATE_FAILED);
+    } else {
+      cartMapper.selectOrNot(userId, productId, selected);
+    }
+    return this.list(userId);
+  }
+
+  @Override
+  public List<CartVO> selectAllOrNot(Integer userId, Integer selected) {
+    cartMapper.selectOrNot(userId, null, selected);
     return this.list(userId);
   }
 

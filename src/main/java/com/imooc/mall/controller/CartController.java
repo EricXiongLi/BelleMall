@@ -48,4 +48,20 @@ public class CartController {
     List<CartVO> cartVOList = cartService.delete(UserFilter.currentUser.getId(), productId);
     return ApiRestResponse.success(cartVOList);
   }
+
+  @ApiOperation("select/unselect a product")
+  @PostMapping("/select")
+  public ApiRestResponse select(@RequestParam Integer productId, @RequestParam Integer selected)
+      throws ImoocMallException {
+    List<CartVO> cartVOList =
+        cartService.selectOrNot(UserFilter.currentUser.getId(), productId, selected);
+    return ApiRestResponse.success(cartVOList);
+  }
+
+  @ApiOperation("select/unselect all products")
+  @PostMapping("/selectAll")
+  public ApiRestResponse selectAll(@RequestParam Integer selected) {
+    List<CartVO> cartVOList = cartService.selectAllOrNot(UserFilter.currentUser.getId(), selected);
+    return ApiRestResponse.success(cartVOList);
+  }
 }
