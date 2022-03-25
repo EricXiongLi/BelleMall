@@ -184,6 +184,16 @@ public class OrderServiceImpl implements OrderService {
     return pngAddress;
   }
 
+  @Override
+  public PageInfo listForAdmin(Integer pageNum, Integer pageSize) throws ImoocMallException {
+    PageHelper.startPage(pageNum, pageSize);
+    List<Order> orderList = orderMapper.selectAllForAdmin();
+    List<OrderVO> orderVOList = orderListToOrderVOList(orderList);
+    PageInfo pageInfo = new PageInfo<>(orderList);
+    pageInfo.setList(orderVOList);
+    return pageInfo;
+  }
+
   private List<OrderVO> orderListToOrderVOList(List<Order> orderList) throws ImoocMallException {
     List<OrderVO> orderVOList = new ArrayList<>();
     for (Order order : orderList) {

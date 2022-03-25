@@ -18,4 +18,6 @@ public interface OrderService {
     void cancel(String orderNo) throws ImoocMallException;
 
     String qrcode(String orderNo) throws IOException, WriterException;
+
+    PageInfo listForAdmin(Integer pageNum, Integer pageSize) throws ImoocMallException;
 }
