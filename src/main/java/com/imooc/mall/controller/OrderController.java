@@ -37,4 +37,11 @@ public class OrderController {
     PageInfo pageInfo = orderService.listForCustomer(pageNum, pageSize);
     return ApiRestResponse.success(pageInfo);
   }
+
+  @ApiOperation("order cancel")
+  @GetMapping("order/cancel")
+  public ApiRestResponse cancel(@RequestParam String orderNo) throws ImoocMallException {
+    orderService.cancel(orderNo);
+    return ApiRestResponse.success();
+  }
 }

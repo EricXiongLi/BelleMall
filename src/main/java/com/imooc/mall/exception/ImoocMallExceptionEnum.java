@@ -22,7 +22,9 @@ public enum ImoocMallExceptionEnum {
   NO_ENUM(10019, "no such enum"),
   NO_ORDER(10020, "no such order"),
   NOT_YOUR_ORDER(10021, "not your order"),
-  SYSTEM_ERROR(20000, "system error");
+  WRONG_ORDER_STATUS(10022, "wrong order status"),
+  SYSTEM_ERROR(20000, "system error"),
+  ;
 
   Integer code;
   String msg;

@@ -27,6 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -139,6 +140,25 @@ public class OrderServiceImpl implements OrderService {
     PageInfo pageInfo = new PageInfo<>(orderList);
     pageInfo.setList(orderVOList);
     return pageInfo;
+  }
+
+  @Override
+  public void cancel(String orderNo) throws ImoocMallException {
+    Order order = orderMapper.selectByOrderNo(orderNo);
+    if (order == null) {
+      throw new ImoocMallException(ImoocMallExceptionEnum.NO_ORDER);
+    }
+    Integer userId = UserFilter.currentUser.getId();
+    if (!userId.equals(order.getUserId())) {
+      throw new ImoocMallException(ImoocMallExceptionEnum.NOT_YOUR_ORDER);
+    }
+    if (order.getOrderStatus().equals(Constant.OrderStatusEnum.NOT_PAID.getCode())) {
+      order.setOrderStatus(Constant.OrderStatusEnum.CANCELLED.getCode());
+      order.setEndTime(new Date());
+      orderMapper.updateByPrimaryKeySelective(order);
+    } else {
+      throw new ImoocMallException(ImoocMallExceptionEnum.WRONG_ORDER_STATUS);
+    }
   }
 
   private List<OrderVO> orderListToOrderVOList(List<Order> orderList) throws ImoocMallException {

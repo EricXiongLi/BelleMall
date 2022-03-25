@@ -11,4 +11,6 @@ public interface OrderService {
     OrderVO detail(String orderNo) throws ImoocMallException;
 
     PageInfo listForCustomer(Integer pageNum, Integer pageSize) throws ImoocMallException;
+
+    void cancel(String orderNo) throws ImoocMallException;
 }
