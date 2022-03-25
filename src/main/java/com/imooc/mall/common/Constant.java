@@ -41,11 +41,11 @@ public class Constant {
     DELIVERED("delivered", 30),
     FINISHED("completed", 40);
 
-    private String name;
+    private String value;
     private int code;
 
-    OrderStatusEnum(String name, int code) {
-      this.name = name;
+    OrderStatusEnum(String value, int code) {
+      this.value = value;
       this.code = code;
     }
 
@@ -58,12 +58,12 @@ public class Constant {
       throw new ImoocMallException(ImoocMallExceptionEnum.NO_ENUM);
     }
 
-    public String getName() {
-      return name;
+    public String getValue() {
+      return value;
     }
 
-    public void setName(String name) {
-      this.name = name;
+    public void setValue(String value) {
+      this.value = value;
     }
 
     public int getCode() {

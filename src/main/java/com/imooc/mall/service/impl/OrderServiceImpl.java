@@ -6,6 +6,8 @@ import com.imooc.mall.exception.ImoocMallException;
 import com.imooc.mall.exception.ImoocMallExceptionEnum;
 import com.imooc.mall.filter.UserFilter;
 import com.imooc.mall.model.VO.CartVO;
+import com.imooc.mall.model.VO.OrderItemVO;
+import com.imooc.mall.model.VO.OrderVO;
 import com.imooc.mall.model.dao.CartMapper;
 import com.imooc.mall.model.dao.OrderItemMapper;
 import com.imooc.mall.model.dao.OrderMapper;
@@ -16,8 +18,10 @@ import com.imooc.mall.model.pojo.Product;
 import com.imooc.mall.model.request.CreateOrderReq;
 import com.imooc.mall.service.CartService;
 import com.imooc.mall.service.OrderService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
@@ -36,6 +40,7 @@ public class OrderServiceImpl implements OrderService {
 
   @Autowired OrderItemMapper orderItemMapper;
 
+  @Transactional(rollbackFor = Exception.class)
   @Override
   public String create(CreateOrderReq createOrderReq) throws ImoocMallException {
     Integer userId = UserFilter.currentUser.getId();
@@ -107,6 +112,36 @@ public class OrderServiceImpl implements OrderService {
       orderItemList.add(orderItem);
     }
     return orderItemList;
+  }
+
+  @Override
+  public OrderVO detail(String orderNo) throws ImoocMallException {
+    Order order = orderMapper.selectByOrderNo(orderNo);
+    if (order == null) {
+      throw new ImoocMallException(ImoocMallExceptionEnum.NO_ORDER);
+    }
+    Integer userId = UserFilter.currentUser.getId();
+    if (!order.getUserId().equals(userId)) {
+      throw new ImoocMallException(ImoocMallExceptionEnum.NOT_YOUR_ORDER);
+    }
+    OrderVO orderVO = getOrderVO(order);
+    return orderVO;
+  }
+
+  private OrderVO getOrderVO(Order order) throws ImoocMallException {
+    OrderVO orderVO = new OrderVO();
+    BeanUtils.copyProperties(order, orderVO);
+    List<OrderItem> orderItemList = orderItemMapper.selectByOrderNo(order.getOrderNo());
+    List<OrderItemVO> orderItemVOList = new ArrayList<>();
+    for (OrderItem orderItem : orderItemList) {
+      OrderItemVO orderItemVO = new OrderItemVO();
+      BeanUtils.copyProperties(orderItem, orderItemVO);
+      orderItemVOList.add(orderItemVO);
+    }
+    orderVO.setOrderItemVOList(orderItemVOList);
+    orderVO.setOrderStatusName(
+        Constant.OrderStatusEnum.codeOf(orderVO.getOrderStatus()).getValue());
+    return orderVO;
   }
 
   private void validSaleStatusAndStock(List<CartVO> cartVOList) throws ImoocMallException {
