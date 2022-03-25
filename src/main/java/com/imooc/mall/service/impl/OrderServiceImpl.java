@@ -2,7 +2,9 @@ package com.imooc.mall.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.google.zxing.WriterException;
 import com.imooc.mall.Utils.OrderCodeFactory;
+import com.imooc.mall.Utils.QRCodeGenerator;
 import com.imooc.mall.common.Constant;
 import com.imooc.mall.exception.ImoocMallException;
 import com.imooc.mall.exception.ImoocMallExceptionEnum;
@@ -22,10 +24,15 @@ import com.imooc.mall.service.CartService;
 import com.imooc.mall.service.OrderService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
+import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -42,6 +49,9 @@ public class OrderServiceImpl implements OrderService {
   @Autowired OrderMapper orderMapper;
 
   @Autowired OrderItemMapper orderItemMapper;
+
+  @Value("${file.upload.ip}")
+  String ip;
 
   @Transactional(rollbackFor = Exception.class)
   @Override
@@ -159,6 +169,19 @@ public class OrderServiceImpl implements OrderService {
     } else {
       throw new ImoocMallException(ImoocMallExceptionEnum.WRONG_ORDER_STATUS);
     }
+  }
+
+  @Override
+  public String qrcode(String orderNo) throws IOException, WriterException {
+    ServletRequestAttributes attributes =
+        (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+    HttpServletRequest request = attributes.getRequest();
+    String address = ip + ":" + request.getLocalPort();
+    String payUrl = "http://" + address + "/pay?orderNo=" + orderNo;
+    QRCodeGenerator.generateQRCodeImage(
+        payUrl, 350, 350, Constant.FILE_UPLOAD_DIR + orderNo + ".png");
+    String pngAddress = "http://" + address + "/images/" + orderNo + ".png";
+    return pngAddress;
   }
 
   private List<OrderVO> orderListToOrderVOList(List<Order> orderList) throws ImoocMallException {

@@ -1,6 +1,7 @@
 package com.imooc.mall.controller;
 
 import com.github.pagehelper.PageInfo;
+import com.google.zxing.WriterException;
 import com.imooc.mall.common.ApiRestResponse;
 import com.imooc.mall.exception.ImoocMallException;
 import com.imooc.mall.model.VO.OrderVO;
@@ -10,6 +11,8 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.models.auth.In;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.io.IOException;
 
 @RestController
 public class OrderController {
@@ -43,5 +46,12 @@ public class OrderController {
   public ApiRestResponse cancel(@RequestParam String orderNo) throws ImoocMallException {
     orderService.cancel(orderNo);
     return ApiRestResponse.success();
+  }
+
+  @ApiOperation("generate QR code")
+  @PostMapping("order/qrcode")
+  public ApiRestResponse qrcode(@RequestParam String orderNo) throws IOException, WriterException {
+    String pngAddress = orderService.qrcode(orderNo);
+    return ApiRestResponse.success(pngAddress);
   }
 }
