@@ -49,7 +49,7 @@ public class OrderController {
   }
 
   @ApiOperation("generate QR code")
-  @PostMapping("order/qrcode")
+  @GetMapping("order/qrcode")
   public ApiRestResponse qrcode(@RequestParam String orderNo) throws IOException, WriterException {
     String pngAddress = orderService.qrcode(orderNo);
     return ApiRestResponse.success(pngAddress);

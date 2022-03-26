@@ -52,6 +52,19 @@ public class AddProductReq {
         this.detail = detail;
     }
 
+    @Override
+    public String toString() {
+        return "AddProductReq{" +
+                "name='" + name + '\'' +
+                ", image='" + image + '\'' +
+                ", detail='" + detail + '\'' +
+                ", categoryId=" + categoryId +
+                ", price=" + price +
+                ", stock=" + stock +
+                ", status=" + status +
+                '}';
+    }
+
     public Integer getCategoryId() {
         return categoryId;
     }

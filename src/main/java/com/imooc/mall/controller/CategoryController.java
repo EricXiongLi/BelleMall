@@ -79,7 +79,7 @@ public class CategoryController {
   }
 
   @ApiOperation("category list in backend")
-  @PostMapping("/admin/category/list")
+  @GetMapping("/admin/category/list")
   @ResponseBody
   public ApiRestResponse listCategoryForAdmin(@RequestParam Integer pageNum, @RequestParam Integer pageSize) {
     PageInfo pageInfo = categoryService.listForAdmin(pageNum,pageSize);
@@ -88,7 +88,7 @@ public class CategoryController {
 
 
   @ApiOperation("category lisf for customer")
-  @PostMapping("category/list")
+  @GetMapping("category/list")
   @ResponseBody
   public ApiRestResponse listCategoryForCustomer() {
     List<CategoryVO> categoryVOS = categoryService.listCategoryForCustomer(0);
