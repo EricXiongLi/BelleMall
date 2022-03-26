@@ -22,4 +22,6 @@ public class OrderAdminController {
     PageInfo pageInfo = orderService.listForAdmin(pageNum, pageSize);
     return ApiRestResponse.success(pageInfo);
   }
+
+
 }

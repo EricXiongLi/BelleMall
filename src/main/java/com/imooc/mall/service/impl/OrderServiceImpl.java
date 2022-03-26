@@ -185,6 +185,21 @@ public class OrderServiceImpl implements OrderService {
   }
 
   @Override
+  public void pay(String orderNo) throws ImoocMallException {
+    Order order = orderMapper.selectByOrderNo(orderNo);
+    if (order == null) {
+      throw new ImoocMallException(ImoocMallExceptionEnum.NO_ORDER);
+    }
+    if (order.getOrderStatus() == Constant.OrderStatusEnum.NOT_PAID.getCode()) {
+      order.setOrderStatus(Constant.OrderStatusEnum.PAID.getCode());
+      order.setPayTime(new Date());
+      orderMapper.updateByPrimaryKeySelective(order);
+    } else {
+      throw new ImoocMallException(ImoocMallExceptionEnum.WRONG_ORDER_STATUS);
+    }
+  }
+
+  @Override
   public PageInfo listForAdmin(Integer pageNum, Integer pageSize) throws ImoocMallException {
     PageHelper.startPage(pageNum, pageSize);
     List<Order> orderList = orderMapper.selectAllForAdmin();

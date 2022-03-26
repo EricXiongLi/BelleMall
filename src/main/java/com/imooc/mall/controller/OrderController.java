@@ -54,4 +54,11 @@ public class OrderController {
     String pngAddress = orderService.qrcode(orderNo);
     return ApiRestResponse.success(pngAddress);
   }
+
+  @GetMapping("pay")
+  @ApiOperation("pay api")
+  public ApiRestResponse pay(@RequestParam String orderNo) throws ImoocMallException {
+    orderService.pay(orderNo);
+    return ApiRestResponse.success();
+  }
 }
