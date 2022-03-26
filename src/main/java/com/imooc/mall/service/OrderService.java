@@ -21,5 +21,9 @@ public interface OrderService {
 
     void pay(String orderNo) throws ImoocMallException;
 
+    void deliver(String orderNo) throws ImoocMallException;
+
+    void finish(String orderNo) throws ImoocMallException;
+
     PageInfo listForAdmin(Integer pageNum, Integer pageSize) throws ImoocMallException;
 }
